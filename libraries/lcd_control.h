@@ -41,10 +41,22 @@ uint8_t cursor_row;
 
 #define S0_MAIN_MENU 0
 
+
+void print_status_display_init()
+{
+	lcd.setBacklight(YELLOW);
+	lcd.setCursor(0,0);
+	lcd.print("C_Temp: ");
+	lcd.setBacklight(YELLOW);
+	lcd.setCursor(0,1);
+	lcd.print("S_Temp: ");
+}
+
 void init_lcd()
 {
 	lcd.begin(16,2);
 	lcd_state = STATUS_DISPLAY;
+	print_status_display_init();
 }
 
 uint8_t button_check()
@@ -52,22 +64,16 @@ uint8_t button_check()
 	return lcd.readButtons();
 }
 
-void print_status_display(float curr_temp, float set_temp, uint8_t temp_state)
+void update_status_display(float curr_temp, float set_temp, uint8_t temp_state)
 {
-	
-	lcd.setBacklight(YELLOW);
 	char temp[6];
-	lcd.setCursor(0,0);
-	lcd.print("C_Temp: ");
+	lcd.setCursor(8,0);
 	lcd.print(dtostrf(curr_temp,4,1,temp));
-
 	if (temp_state == ACTIVE_HEATING)
 		lcd.print(" H");
 	else 
 		lcd.print(" O");
-
-	lcd.setCursor(0,1);
-	lcd.print("S_Temp: ");
+	lcd.setCursor(8,1);
 	lcd.print(dtostrf(set_temp,4,1,temp));
 }
 
@@ -91,6 +97,7 @@ void state_trans(uint8_t button_state)
 				prev_lcd_state = MAIN_MENU;
 				lcd_state = STATUS_DISPLAY;
 				lcd.clear();
+				print_status_display_init();
 			}
 			else if (button_state&BUTTON_RIGHT)
 			{
@@ -147,7 +154,7 @@ void refresh_display(float curr_temp, float set_temp, uint8_t heating_state)
 	switch (lcd_state)
 	{
 		case STATUS_DISPLAY:
-			print_status_display(curr_temp,set_temp,heating_state);
+			update_status_display(curr_temp,set_temp,heating_state);
 		break;
 		case MAIN_MENU:
 			print_main_menu(button_state);
