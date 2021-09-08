@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include "libraries/lcd_control.h"
-//#include "libraries/temp_control.hg
 
 float curr_temp;
 float set_temp;

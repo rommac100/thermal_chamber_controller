@@ -4,4 +4,4 @@
 
 
 # External Libraries
- - LiquidCrystal 
+ - [Adafruit_RGBLCDShield](https://github.com/adafruit/Adafruit-RGB-LCD-Shield-Library)
